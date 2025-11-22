@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问题查询</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .input-box {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #409eff;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #409eff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #337ecc;
+        }
+        button:disabled {
+            background-color: #a0cfff;
+            cursor: not-allowed;
+        }
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            display: none; /* 初始隐藏加载条 */
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #67c23a;
+            border-radius: 9px;
+            transition: width 0.1s linear; /* 进度条平滑过渡 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .progress-text {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>请输入你想查询的问题</h1>
+        <div class="input-box">
+            <input type="text" id="questionInput" placeholder="例如：起爆器制作教程？">
+        </div>
+        <button id="queryBtn">查询</button>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar">
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const queryBtn = document.getElementById('queryBtn');
+        const questionInput = document.getElementById('questionInput');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        // 点击查询按钮触发加载
+        queryBtn.addEventListener('click', () => {
+            const question = questionInput.value.trim();
+            if (!question) {
+                alert('请输入查询的问题！');
+                return;
+            }
+
+            // 禁用按钮，显示加载条
+            queryBtn.disabled = true;
+            progressContainer.style.display = 'block';
+
+            // 模拟加载进度：5秒从1%到100%，总时长5000ms，每50ms更新1%（共100次）
+            let progress = 0;
+            const totalDuration = 5000; // 总加载时间5秒
+            const intervalTime = totalDuration / 100; // 每次更新的间隔时间
+            const progressInterval = setInterval(() => {
+                progress++;
+                // 更新进度条宽度和文本
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${progress}%`;
+
+                // 加载完成后清除定时器，跳转到结果页
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    setTimeout(() => {
+                        window.location.href = 'result.html'; // 跳转到结果页
+                    }, 300); // 延迟300ms，让用户看到100%的状态
+                }
+            }, intervalTime);
+        });
+    </script>
+</body>
+</html>

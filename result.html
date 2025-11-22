@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大家好我叫东雪莲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .result-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        /* 初始隐藏查询结果相关内容 */
+        .content-wrapper {
+            display: none;
+        }
+        .result-container h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        /* 倒计时样式 */
+        .countdown {
+            font-size: 20px;
+            color: #e6a23c;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        /* 核心交互按钮：初始仅显示这个按钮 */
+        .click-me-btn {
+            padding: 20px 40px;
+            background-color: #409eff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+        }
+        .click-me-btn:hover {
+            background-color: #337ecc;
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(64, 158, 255, 0.5);
+        }
+        .result-img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        /* 强制隐藏音频控件 */
+        audio {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <!-- 核心交互按钮：初始显示，点击后隐藏 -->
+        <button class="click-me-btn" id="clickMeBtn">点我</button>
+
+        <!-- 被隐藏的内容包裹层：初始display: none -->
+        <div class="content-wrapper" id="contentWrapper">
+            <h2>谁动谁是gay</h2>
+            <!-- 倒计时显示区域 -->
+            <div class="countdown" id="countdown">151 秒</div>
+            <!-- 本地图片 -->
+            <img src="./static/images/result.jpg" alt="谁动谁是gay" class="result-img">
+        </div>
+    </div>
+
+    <!-- 本地背景音乐：循环播放，初始不自动播放 -->
+    <audio id="bgMusic" loop hidden>
+        <source src="./static/audio/bg-music.mp3" type="audio/mpeg">
+        您的浏览器不支持HTML5音频播放，请更换浏览器后重试。
+    </audio>
+
+    <script>
+        // 获取核心元素
+        const clickMeBtn = document.getElementById('clickMeBtn');
+        const contentWrapper = document.getElementById('contentWrapper');
+        const bgMusic = document.getElementById('bgMusic');
+        const countdownElement = document.getElementById('countdown');
+
+        // 「点我」按钮点击事件：核心交互逻辑
+        clickMeBtn.addEventListener('click', () => {
+            // 1. 隐藏「点我」按钮
+            clickMeBtn.style.display = 'none';
+            // 2. 显示所有查询结果内容
+            contentWrapper.style.display = 'block';
+            // 3. 播放背景音乐（用户已交互，浏览器不拦截）
+            bgMusic.play().then(() => {
+                console.log('背景音乐自动播放成功');
+            }).catch(err => {
+                console.log('音频播放失败：', err);
+                alert('背景音乐播放失败，请检查文件路径！');
+            });
+            // 4. 启动倒计时（放在点击事件内，确保只有用户交互后才开始倒计时）
+            startCountdown();
+        });
+
+        // 231秒倒计时函数
+        function startCountdown() {
+            let countdownTime = 151;
+            const countdownInterval = setInterval(() => {
+                countdownTime--;
+                countdownElement.textContent = `${countdownTime} 秒`;
+                // 倒计时结束，跳转到彩蛋页面
+                if (countdownTime <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'eggs.html';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
